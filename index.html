@@ -3,22 +3,211 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mi Pitch Deck</title>
+  <title>Acqua Vitali | Pitch Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css" />
 </head>
 <body>
+  <div class="progress-bar" aria-hidden="true">
+    <div class="progress-bar__fill" id="progressFill"></div>
+  </div>
+
   <main class="page-shell">
-    <section class="section section--center">
+    <section class="section section--center" id="hero">
       <div class="container section__inner">
-        <span class="eyebrow">Presentación</span>
-        <h1>Mi Pitch Deck</h1>
-        <p class="lead">
-          Sitio publicado correctamente en Vercel. Ahora ya está cargando HTML real.
-        </p>
+        <div class="eyebrow">Acqua Vitali · Pitch Comercial</div>
+        <div class="grid-2" style="align-items:center;">
+          <div style="display:grid; gap:20px;">
+            <div class="logo-mark">AV</div>
+            <h1>ACQUA<br />VITALI</h1>
+            <p class="lead">
+              <strong style="color:var(--text-color);">Pureza esencial, hidratación vital.</strong><br />
+              Soluciones de hidratación para empresas, eventos y puntos de venta, con un servicio flexible, cercano y confiable.
+            </p>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <a class="card card--padded" href="#solucion" style="text-decoration:none; color:var(--text-color);">Ver propuesta</a>
+              <a class="card card--padded" href="#contacto" style="text-decoration:none; color:var(--text-color);">Agendar reunión</a>
+            </div>
+          </div>
+          <div class="card card--padded">
+            <h3 style="margin-bottom:14px;">Qué resolvemos</h3>
+            <div class="card-grid" style="grid-template-columns:1fr; gap:14px;">
+              <div class="kpi">
+                <div class="kpi__value">24/7</div>
+                <div class="kpi__label">Necesidad constante de hidratación en oficinas, faenas y terreno</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi__value">3</div>
+                <div class="kpi__label">Canales de venta: empresas, venta directa y puntos de venta</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi__value">+Flex</div>
+                <div class="kpi__label">Arriendo, comodato y suministro adaptado a cada cliente</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="problema">
+      <div class="container section__inner">
+        <div class="eyebrow">El problema</div>
+        <h2>La hidratación suele resolverse mal</h2>
+        <div class="card-grid">
+          <article class="card card--padded">
+            <h3>Servicio poco flexible</h3>
+            <p>Muchos proveedores trabajan con condiciones rígidas, tiempos lentos y poca capacidad de adaptación.</p>
+          </article>
+          <article class="card card--padded">
+            <h3>Mala experiencia</h3>
+            <p>Reposición tardía, atención impersonal y soluciones poco prácticas para empresas y eventos.</p>
+          </article>
+          <article class="card card--padded">
+            <h3>Poca imagen de marca</h3>
+            <p>La hidratación también comunica orden, preocupación por las personas y profesionalismo frente a clientes y equipos.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="solucion">
+      <div class="container section__inner">
+        <div class="eyebrow">La solución</div>
+        <h2>Un servicio de hidratación adaptable y cercano</h2>
+        <div class="grid-2">
+          <div class="card card--padded">
+            <h3 style="margin-bottom:16px;">Qué ofrece Acqua Vitali</h3>
+            <div style="display:grid; gap:12px;">
+              <div class="kpi"><div class="kpi__label">Suministro de bidones de agua purificada</div></div>
+              <div class="kpi"><div class="kpi__label">Arriendo y comodato de dispensadores</div></div>
+              <div class="kpi"><div class="kpi__label">Atención a empresas, oficinas, faenas y eventos</div></div>
+              <div class="kpi"><div class="kpi__label">Formato flexible según volumen y frecuencia de reposición</div></div>
+            </div>
+          </div>
+          <div class="card card--padded">
+            <h3 style="margin-bottom:16px;">Propuesta de valor</h3>
+            <p class="lead">
+              No vendemos solo agua. Entregamos continuidad operacional, buena imagen, atención rápida y una relación comercial directa con foco local.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="modelo">
+      <div class="container section__inner">
+        <div class="eyebrow">Modelo de negocio</div>
+        <h2>Tres canales para crecer rápido</h2>
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi__value">01</div>
+            <div class="kpi__label">Empresas: oficinas, industria, contratistas, instituciones, centros deportivos y educación.</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__value">02</div>
+            <div class="kpi__label">Venta directa: hogares, clientes recurrentes y redes de recomendación.</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__value">03</div>
+            <div class="kpi__label">Puntos de venta: comercios, gimnasios, locales y alianzas estratégicas.</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__value">+Escala</div>
+            <div class="kpi__label">Cada canal alimenta el siguiente y permite aumentar cobertura y recurrencia.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="diferenciales">
+      <div class="container section__inner">
+        <div class="eyebrow">Diferenciales</div>
+        <h2>Por qué Acqua Vitali</h2>
+        <div class="card-grid">
+          <article class="card card--padded">
+            <h3>Atención directa</h3>
+            <p>Relación cercana, comunicación rápida y solución de requerimientos sin burocracia.</p>
+          </article>
+          <article class="card card--padded">
+            <h3>Flexibilidad comercial</h3>
+            <p>Arriendo, venta, comodato y formatos ajustados al cliente y su consumo real.</p>
+          </article>
+          <article class="card card--padded">
+            <h3>Enfoque local</h3>
+            <p>Capacidad de respuesta en la zona y conocimiento real del mercado y sus necesidades.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="oferta">
+      <div class="container section__inner">
+        <div class="eyebrow">Oferta comercial</div>
+        <h2>Formatos de trabajo</h2>
+        <div class="grid-2">
+          <div class="card card--padded">
+            <h3 style="margin-bottom:16px;">Empresas e instituciones</h3>
+            <p>Servicio periódico de bidones, instalación de dispensadores y reposición según consumo.</p>
+          </div>
+          <div class="card card--padded">
+            <h3 style="margin-bottom:16px;">Eventos y activaciones</h3>
+            <p>Puntos de hidratación, soporte logístico y presencia de marca en actividades deportivas y corporativas.</p>
+          </div>
+          <div class="card card--padded">
+            <h3 style="margin-bottom:16px;">Puntos de venta</h3>
+            <p>Alianzas con comercios y espacios estratégicos para ampliar cobertura y recurrencia.</p>
+          </div>
+          <div class="card card--padded">
+            <h3 style="margin-bottom:16px;">Planes a medida</h3>
+            <p>Propuestas adaptadas a volumen, frecuencia, tipo de cliente y necesidad operacional.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="vision">
+      <div class="container section__inner">
+        <div class="eyebrow">Visión de crecimiento</div>
+        <h2>Construir una marca confiable y escalable</h2>
+        <div class="card card--padded">
+          <p class="lead">
+            Acqua Vitali busca posicionarse como una alternativa moderna, flexible y cercana en el mercado de hidratación, desarrollando relaciones comerciales de largo plazo con empresas, organizaciones y clientes recurrentes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contacto">
+      <div class="container section__inner">
+        <div class="eyebrow">Cierre</div>
+        <h2>Llevemos una propuesta concreta a tu empresa</h2>
+        <div class="grid-2">
+          <div class="card card--padded">
+            <p class="lead">
+              Acqua Vitali entrega hidratación confiable, imagen profesional y atención personalizada para empresas, eventos y puntos de venta.
+            </p>
+          </div>
+          <div class="card card--padded">
+            <h3 style="margin-bottom:16px;">Contacto</h3>
+            <p>Instagram: @acquavitali</p>
+            <p>Propuesta comercial y reunión de presentación disponible.</p>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <script src="main.js"></script>
+  <script>
+    const fill = document.getElementById('progressFill');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      fill.style.width = `${progress}%`;
+    });
+  </script>
 </body>
 </html>
