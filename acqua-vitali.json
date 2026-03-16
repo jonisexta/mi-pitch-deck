@@ -1,0 +1,228 @@
+gsap.registerPlugin(ScrollTrigger);
+
+(async function initAcquaVitali() {
+  const response = await fetch('/data/acqua-vitali.json');
+  const data = await response.json();
+
+  hydrateContent(data);
+  setupHeroAnimations();
+  setupSegmentScroll(data.segments);
+  setupSolutions(data.solutions);
+  setupKpis(data.kpis);
+  setupProof(data.socialProof);
+  setupGrowthChart(data.growth);
+  setupClosing();
+
+  SharedCore.setupProgressBar();
+  SharedCore.animateCounters();
+  SharedCore.setupViewportVideos();
+  SharedCore.setupHoverVideos();
+})();
+
+function hydrateContent(data) {
+  document.title = `${data.brand.name} | Presentación interactiva`;
+  document.querySelector('[data-brand-name]').textContent = data.brand.name;
+  document.querySelector('[data-brand-tagline]').textContent = data.brand.tagline;
+  document.querySelector('[data-hero-title]').innerHTML = `${data.hero.title.replace('Hidratación purificada', '<span>Hidratación purificada</span>')}`;
+  document.querySelector('[data-hero-subtitle]').textContent = data.hero.subtitle;
+  document.querySelector('[data-contact-headline]').textContent = data.contact.headline;
+  document.querySelector('[data-contact-subheadline]').textContent = data.contact.subheadline;
+}
+
+function setupHeroAnimations() {
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.from('[data-hero-eyebrow]', { autoAlpha: 0, y: 18, duration: 0.7 })
+    .from('[data-hero-title]', { autoAlpha: 0, y: 32, duration: 1 }, '-=0.35')
+    .from('[data-hero-subtitle]', { autoAlpha: 0, y: 22, duration: 0.9 }, '-=0.55')
+    .from('.hero__stat', { autoAlpha: 0, y: 12, stagger: 0.08, duration: 0.5 }, '-=0.45')
+    .from('.hero__badge, .hero__panel', { autoAlpha: 0, y: 28, stagger: 0.1, duration: 0.8 }, '-=0.5');
+}
+
+function setupSegmentScroll(segments) {
+  const tabs = document.getElementById('segment-tabs');
+  const panels = document.getElementById('segment-panels');
+  const image = document.getElementById('segment-image');
+  const sceneAssets = [
+    '/brands/acqua-vitali/assets/scene-office.svg',
+    '/brands/acqua-vitali/assets/scene-worksite.svg',
+    '/brands/acqua-vitali/assets/scene-campus.svg'
+  ];
+
+  tabs.innerHTML = '';
+  panels.innerHTML = '';
+
+  segments.forEach((segment, index) => {
+    const tab = document.createElement('div');
+    tab.className = `tab ${index === 0 ? 'is-active' : ''}`;
+    tab.textContent = segment.label;
+    tabs.appendChild(tab);
+
+    const panel = document.createElement('article');
+    panel.className = `stack-panel card card--padded ${index === 0 ? 'is-active' : ''}`;
+    panel.innerHTML = `
+      <div class="segment-copy">
+        <h3>${segment.title}</h3>
+        <p>${segment.text}</p>
+        <ul>${segment.bullets.map((item) => `<li>${item}</li>`).join('')}</ul>
+      </div>
+    `;
+    panels.appendChild(panel);
+  });
+
+  const tabNodes = gsap.utils.toArray('#segment-tabs .tab');
+  const panelNodes = gsap.utils.toArray('#segment-panels .stack-panel');
+
+  ScrollTrigger.create({
+    trigger: '#segment-shell',
+    start: 'top top',
+    end: '+=2400',
+    pin: true,
+    scrub: 1,
+    onUpdate: (self) => {
+      const raw = self.progress * segments.length;
+      const active = Math.min(segments.length - 1, Math.floor(raw));
+
+      tabNodes.forEach((tab, index) => tab.classList.toggle('is-active', index === active));
+      panelNodes.forEach((panel, index) => panel.classList.toggle('is-active', index === active));
+      image.src = sceneAssets[active];
+
+      panelNodes.forEach((panel, index) => {
+        const isActive = index === active;
+        gsap.to(panel, {
+          autoAlpha: isActive ? 1 : 0,
+          y: isActive ? 0 : 36,
+          duration: 0.35,
+          overwrite: true,
+          ease: 'power2.out'
+        });
+      });
+    }
+  });
+}
+
+function setupSolutions(solutions) {
+  const grid = document.getElementById('solutions-grid');
+  grid.innerHTML = solutions.map((item) => `
+    <article class="card solution-card">
+      <h3>${item.title}</h3>
+      <p>${item.description}</p>
+      <span class="solution-card__metric">${item.metric}</span>
+    </article>
+  `).join('');
+
+  SharedCore.fadeUp('#solutions .solution-card', '#solutions', { stagger: 0.1 });
+}
+
+function setupKpis(kpis) {
+  const grid = document.getElementById('kpi-grid');
+  grid.innerHTML = kpis.map((kpi) => `
+    <article class="kpi">
+      <div class="kpi__value" data-counter="${kpi.value}" data-suffix="${kpi.suffix}">0</div>
+      <div class="kpi__label">${kpi.label}</div>
+    </article>
+  `).join('');
+}
+
+function setupProof(cards) {
+  const grid = document.getElementById('proof-grid');
+  const art = [
+    '/brands/acqua-vitali/assets/scene-office.svg',
+    '/brands/acqua-vitali/assets/scene-worksite.svg',
+    '/brands/acqua-vitali/assets/scene-campus.svg'
+  ];
+
+  grid.innerHTML = cards.map((card, index) => `
+    <article class="card media-card">
+      <img src="${art[index % art.length]}" alt="${card.title}">
+      <div class="media-card__body">
+        <h3>${card.title}</h3>
+        <p>${card.text}</p>
+      </div>
+    </article>
+  `).join('');
+
+  SharedCore.fadeUp('#proof-grid .media-card', '#growth', { stagger: 0.08 });
+}
+
+function setupGrowthChart(growth) {
+  const canvas = document.getElementById('growthChart');
+  let chart;
+
+  ScrollTrigger.create({
+    trigger: '#growth',
+    start: 'top 65%',
+    once: true,
+    onEnter: () => {
+      if (chart) return;
+      chart = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: growth.labels,
+          datasets: [{
+            label: 'Puntos de hidratación proyectados',
+            data: growth.series,
+            borderColor: '#77e7ff',
+            backgroundColor: 'rgba(119, 231, 255, 0.18)',
+            fill: true,
+            tension: 0.35,
+            borderWidth: 3,
+            pointRadius: 4,
+            pointHoverRadius: 5,
+            pointBackgroundColor: '#77e7ff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#07111c',
+              borderColor: 'rgba(119, 231, 255, 0.24)',
+              borderWidth: 1,
+              titleColor: '#f2fbff',
+              bodyColor: 'rgba(242, 251, 255, 0.76)'
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255,255,255,0.06)' },
+              ticks: { color: 'rgba(242, 251, 255, 0.72)' }
+            },
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(255,255,255,0.06)' },
+              ticks: { color: 'rgba(242, 251, 255, 0.72)' }
+            }
+          }
+        }
+      });
+    }
+  });
+}
+
+function setupClosing() {
+  const panel = document.querySelector('.closing__panel');
+  const copy = document.querySelector('.closing__copy');
+
+  ScrollTrigger.create({
+    trigger: '#closing',
+    start: 'top top',
+    end: '+=1200',
+    pin: true,
+    scrub: 1,
+    animation: gsap.timeline()
+      .fromTo(copy, { autoAlpha: 0.1, scale: 0.9, y: 60 }, { autoAlpha: 1, scale: 1, y: 0, duration: 0.45, ease: 'none' })
+      .to(copy, { autoAlpha: 0.15, scale: 0.92, y: -40, duration: 0.55, ease: 'none' })
+  });
+
+  gsap.from(panel, {
+    autoAlpha: 0,
+    y: 30,
+    duration: 0.8,
+    scrollTrigger: {
+      trigger: '#closing',
+      start: 'top 80%'
+    }
+  });
+}

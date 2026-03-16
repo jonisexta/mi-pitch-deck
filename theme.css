@@ -1,0 +1,114 @@
+window.SharedCore = (() => {
+  const formatNumber = (value, suffix = '') => {
+    const numeric = Number(value);
+    if (Number.isNaN(numeric)) return `${value}${suffix}`;
+    return `${numeric.toLocaleString('es-CL')}${suffix}`;
+  };
+
+  const animateCounters = (scope = document) => {
+    const counters = scope.querySelectorAll('[data-counter]');
+    counters.forEach((counter) => {
+      const end = Number(counter.dataset.counter || 0);
+      const suffix = counter.dataset.suffix || '';
+      const duration = Number(counter.dataset.duration || 1.8);
+      gsap.fromTo(counter,
+        { innerText: 0 },
+        {
+          innerText: end,
+          duration,
+          ease: 'power2.out',
+          snap: { innerText: 1 },
+          onUpdate: function () {
+            counter.textContent = formatNumber(counter.innerText, suffix);
+          },
+          scrollTrigger: {
+            trigger: counter,
+            start: 'top 85%',
+            once: true,
+          }
+        }
+      );
+    });
+  };
+
+  const setupProgressBar = () => {
+    const fill = document.querySelector('[data-progress-fill]');
+    if (!fill) return;
+
+    gsap.to(fill, {
+      width: '100%',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: document.body,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+      }
+    });
+  };
+
+  const setupViewportVideos = (scope = document) => {
+    const videos = scope.querySelectorAll('.phone__screen video, [data-autoplay-video]');
+    if (!videos.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target;
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    }, { threshold: 0.45 });
+
+    videos.forEach((video) => {
+      video.muted = true;
+      video.loop = true;
+      video.playsInline = true;
+      observer.observe(video);
+    });
+  };
+
+  const setupHoverVideos = (scope = document) => {
+    const cards = scope.querySelectorAll('[data-hover-video]');
+    cards.forEach((card) => {
+      const video = card.querySelector('video');
+      if (!video) return;
+      video.muted = true;
+      video.loop = true;
+      video.playsInline = true;
+      card.addEventListener('mouseenter', () => video.play().catch(() => {}));
+      card.addEventListener('mouseleave', () => {
+        video.pause();
+        video.currentTime = 0;
+      });
+    });
+  };
+
+  const fadeUp = (elements, trigger, options = {}) => {
+    gsap.fromTo(elements,
+      { autoAlpha: 0, y: options.fromY ?? 50 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: options.duration ?? 1,
+        stagger: options.stagger ?? 0.08,
+        ease: options.ease ?? 'power2.out',
+        scrollTrigger: {
+          trigger,
+          start: options.start ?? 'top 75%',
+          toggleActions: 'play none none reverse',
+        }
+      }
+    );
+  };
+
+  return {
+    animateCounters,
+    setupProgressBar,
+    setupViewportVideos,
+    setupHoverVideos,
+    fadeUp,
+  };
+})();
